@@ -3,6 +3,8 @@ package gorocksdb
 // #include "rocksdb/c.h"
 import "C"
 
+type CTypeRocksDBEnvT *C.rocksdb_env_t
+
 // Env is a system call environment used by a database.
 type Env struct {
 	c *C.rocksdb_env_t
