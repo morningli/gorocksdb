@@ -1,6 +1,10 @@
 #include <stdlib.h>
 #include "rocksdb/c.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // This API provides convenient C wrapper functions for rocksdb client.
 
 /* Base */
@@ -28,3 +32,9 @@ extern void gorocksdb_mergeoperator_delete_value(void* state, const char* v, siz
 /* Slice Transform */
 
 extern rocksdb_slicetransform_t* gorocksdb_slicetransform_create(uintptr_t idx);
+
+extern rocksdb_env_t* rocksdb_create_custom_env(uintptr_t idx);
+
+#ifdef __cplusplus
+} /* end extern "C" */
+#endif

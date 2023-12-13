@@ -1,6 +1,10 @@
 #include "gorocksdb.h"
 #include "_cgo_export.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Base */
 
 void gorocksdb_destruct_handler(void* state) { }
@@ -68,3 +72,7 @@ rocksdb_slicetransform_t* gorocksdb_slicetransform_create(uintptr_t idx) {
     	(unsigned char (*)(void*, const char*, size_t))(gorocksdb_slicetransform_in_range),
     	(const char* (*)(void*))(gorocksdb_slicetransform_name));
 }
+
+#ifdef __cplusplus
+} /* end extern "C" */
+#endif
