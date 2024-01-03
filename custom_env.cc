@@ -45,12 +45,10 @@ Status err_to_status(int r) {
             return Status::Busy(strerror(-ENOTDIR));
         case -ENOSPC:
             return Status::NoSpace();
-        // TODO: case -EBADFD:
+        case -EAGAIN:
+            return Status::TryAgain();
         default:
-            // FIXME :(
-            std::cerr << "unsupported code:" << r << std::endl;
-            assert(0 == "unrecognized error code");
-            return Status::NotSupported(Status::kNone);
+            return Status::IOError("", strerror(r));
     }
 }
 
@@ -87,6 +85,10 @@ class CustomSequentialFile : public SequentialFile {
         int ret = ((int (*)(void*, uint64_t, uint64_t))(
             gorocksdb_SequentialFile_InvalidateCache))(_pointer, offset, length);
         return err_to_status(ret);
+    }
+
+    bool use_direct_io() const {
+        return ((int (*)(void*))(gorocksdb_SequentialFile_use_direct_io))(_pointer);
     }
 };
 
@@ -127,6 +129,10 @@ class CustomRandomAccessFile : public RandomAccessFile {
         int ret = ((int (*)(void*, uint64_t, uint64_t))(
             gorocksdb_RandomAccessFile_InvalidateCache))(_pointer, offset, length);
         return err_to_status(ret);
+    }
+
+    bool use_direct_io() const {
+        return ((int (*)(void*))(gorocksdb_RandomAccessFile_use_direct_io))(_pointer);
     }
 };
 

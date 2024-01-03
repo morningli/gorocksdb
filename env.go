@@ -14,6 +14,7 @@ type SequentialFile interface {
 	Read(p []byte) (int, error)
 	Skip(n int64) error
 	InvalidateCache(offset int64, length int) error
+	UseDirectIo() bool
 	Release()
 }
 
@@ -32,6 +33,7 @@ type RandomAccessFile interface {
 	Read(offset int64, p []byte) (int, error)
 	Hint(pattern AccessPattern)
 	InvalidateCache(offset int64, length int) error
+	UseDirectIo() bool
 	Release()
 }
 
@@ -451,6 +453,11 @@ func gorocksdb_SequentialFile_InvalidateCache(idx int, offset C.uint64_t, length
 	return 0
 }
 
+//export gorocksdb_SequentialFile_use_direct_io
+func gorocksdb_SequentialFile_use_direct_io(idx int) bool {
+	return files.Get(idx).(SequentialFile).UseDirectIo()
+}
+
 //export gorocksdb_SequentialFile_Release
 func gorocksdb_SequentialFile_Release(idx int) {
 	files.Get(idx).(SequentialFile).Release()
@@ -497,6 +504,11 @@ func gorocksdb_RandomAccessFile_InvalidateCache(idx int, offset C.uint64_t, leng
 		return -C.int(syscall.EIO)
 	}
 	return 0
+}
+
+//export gorocksdb_RandomAccessFile_use_direct_io
+func gorocksdb_RandomAccessFile_use_direct_io(idx int) bool {
+	return files.Get(idx).(RandomAccessFile).UseDirectIo()
 }
 
 //export gorocksdb_RandomAccessFile_Release
