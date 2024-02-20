@@ -184,6 +184,11 @@ class CustomWritableFile : public WritableFile {
         return err_to_status(ret);
     }
 
+    Status Fsync() {  // sync
+        int ret = ((int (*)(void*))(gorocksdb_WritableFile_Fsync))(_pointer);
+        return err_to_status(ret);
+    }
+
     bool IsSyncThreadSafe() const {
         return ((int (*)(void*))(gorocksdb_WritableFile_IsSyncThreadSafe))(
             _pointer);

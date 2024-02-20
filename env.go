@@ -44,6 +44,7 @@ type WritableFile interface {
 	Truncate(size int64) error
 	Flush() error
 	Sync() error
+	Fsync() error
 	IsSyncThreadSafe() bool
 	UseDirectIo() bool
 	GetFileSize() int64
@@ -582,6 +583,18 @@ func gorocksdb_WritableFile_Flush(idx int) C.int {
 //export gorocksdb_WritableFile_Sync
 func gorocksdb_WritableFile_Sync(idx int) C.int {
 	err := files.Get(idx).(WritableFile).Sync()
+	if err != nil {
+		if errno, ok := err.(syscall.Errno); ok {
+			return -C.int(errno)
+		}
+		return -C.int(syscall.EIO)
+	}
+	return 0
+}
+
+//export gorocksdb_WritableFile_Fsync
+func gorocksdb_WritableFile_Fsync(idx int) C.int {
+	err := files.Get(idx).(WritableFile).Fsync()
 	if err != nil {
 		if errno, ok := err.(syscall.Errno); ok {
 			return -C.int(errno)
