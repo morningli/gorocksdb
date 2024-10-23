@@ -5,6 +5,11 @@
 extern "C" {
 #endif
 
+/* Exported types */
+
+typedef struct rocksdb_listener_t rocksdb_listener_t;
+typedef struct rocksdb_status_t rocksdb_status_t;
+
 // This API provides convenient C wrapper functions for rocksdb client.
 
 /* Base */
@@ -34,6 +39,9 @@ extern void gorocksdb_mergeoperator_delete_value(void* state, const char* v, siz
 extern rocksdb_slicetransform_t* gorocksdb_slicetransform_create(uintptr_t idx);
 
 extern rocksdb_env_t* rocksdb_create_custom_env(uintptr_t idx);
+
+extern rocksdb_listener_t* rocksdb_create_background_error_listener(uintptr_t idx);
+extern void rocksdb_options_set_listener(rocksdb_options_t * opts, rocksdb_listener_t* listener);
 
 #ifdef __cplusplus
 } /* end extern "C" */

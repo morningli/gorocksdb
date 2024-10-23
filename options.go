@@ -1268,3 +1268,7 @@ func (opts *Options) Destroy() {
 	opts.env = nil
 	opts.bbto = nil
 }
+
+func (opts *Options) SetListener(s *Listener) {
+	C.rocksdb_options_set_listener(opts.c, s.c)
+}
