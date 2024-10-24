@@ -49,6 +49,9 @@ extern int rocksdb_status_code(rocksdb_status_t * status);
 extern int rocksdb_status_subcode(rocksdb_status_t * status);
 extern int rocksdb_status_severity(rocksdb_status_t * status);
 extern char* rocksdb_status_getState(rocksdb_status_t * status);
+extern char* rocksdb_status_ToString(rocksdb_status_t * status);
+
+extern char* rocksdb_resume(rocksdb_t* db, char** errptr);
 
 #ifdef __cplusplus
 } /* end extern "C" */

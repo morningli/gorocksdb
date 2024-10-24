@@ -2,6 +2,7 @@ package gorocksdb
 
 // #include <stdlib.h>
 // #include "rocksdb/c.h"
+// #include "gorocksdb.h"
 import "C"
 import (
 	"errors"
@@ -995,6 +996,16 @@ func RepairDb(name string, opts *Options) error {
 	)
 	defer C.free(unsafe.Pointer(cName))
 	C.rocksdb_repair_db(opts.c, cName, &cErr)
+	if cErr != nil {
+		defer C.rocksdb_free(unsafe.Pointer(cErr))
+		return errors.New(C.GoString(cErr))
+	}
+	return nil
+}
+
+func (db *DB) Resume() error {
+	var cErr *C.char
+	C.rocksdb_resume(db.c, &cErr)
 	if cErr != nil {
 		defer C.rocksdb_free(unsafe.Pointer(cErr))
 		return errors.New(C.GoString(cErr))

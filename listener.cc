@@ -13,22 +13,18 @@
 #include <mutex>
 #include <utility>
 
+#include "rocksdb/db.h"
+#include "rocksdb/status.h"
 #include "rocksdb/options.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-struct rocksdb_listener_t {
-    rocksdb::EventListener* rep;
-};
-struct rocksdb_status_t {
-    rocksdb::Status* rep;
-};
-
-struct rocksdb_options_t_tmp { 
-    rocksdb::Options rep; 
-};
+struct rocksdb_listener_t { rocksdb::EventListener* rep; };
+struct rocksdb_options_t_tmp { rocksdb::Options rep; };
+struct rocksdb_status_t { rocksdb::Status* rep; };
+struct rocksdb_t_tmp { rocksdb::DB* rep; };
 
 #ifdef __cplusplus
 } /* end extern "C" */
@@ -99,6 +95,31 @@ int rocksdb_status_severity(rocksdb_status_t * status) {
 char* rocksdb_status_getState(rocksdb_status_t * status) {
     return const_cast<char*>(status->rep->getState());
 }
+
+char* rocksdb_status_ToString(rocksdb_status_t * status) {
+    return const_cast<char*>(status->rep->ToString().c_str());
+}
+
+static bool SaveError(char** errptr, const rocksdb::Status& s) {
+  assert(errptr != nullptr);
+  if (s.ok()) {
+    return false;
+  } else if (*errptr == nullptr) {
+    *errptr = strdup(s.ToString().c_str());
+  } else {
+    // TODO(sanjay): Merge with existing error?
+    // This is a bug if *errptr is not created by malloc()
+    free(*errptr);
+    *errptr = strdup(s.ToString().c_str());
+  }
+  return true;
+}
+
+char* rocksdb_resume(rocksdb_t* db, char** errptr) {
+  rocksdb_t_tmp* _db = (rocksdb_t_tmp*)db;  
+  SaveError(errptr, _db->rep->Resume());
+}
+
 
 #ifdef __cplusplus
 } /* end extern "C" */
