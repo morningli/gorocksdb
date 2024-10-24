@@ -1269,6 +1269,6 @@ func (opts *Options) Destroy() {
 	opts.bbto = nil
 }
 
-func (opts *Options) SetListener(s *Listener) {
+func (opts *Options) SetListener(s *EnventListener) {
 	C.rocksdb_options_set_listener(opts.c, s.c)
 }

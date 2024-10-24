@@ -41,7 +41,14 @@ extern rocksdb_slicetransform_t* gorocksdb_slicetransform_create(uintptr_t idx);
 extern rocksdb_env_t* rocksdb_create_custom_env(uintptr_t idx);
 
 extern rocksdb_listener_t* rocksdb_create_background_error_listener(uintptr_t idx);
+extern rocksdb_listener_t* rocksdb_create_error_recover_listener(uintptr_t idx);
+
 extern void rocksdb_options_set_listener(rocksdb_options_t * opts, rocksdb_listener_t* listener);
+
+extern int rocksdb_status_code(rocksdb_status_t * status);
+extern int rocksdb_status_subcode(rocksdb_status_t * status);
+extern int rocksdb_status_severity(rocksdb_status_t * status);
+extern char* rocksdb_status_getState(rocksdb_status_t * status);
 
 #ifdef __cplusplus
 } /* end extern "C" */

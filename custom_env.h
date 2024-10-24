@@ -11,7 +11,6 @@
 #include <unordered_map>
 #include <utility>
 
-#include "_cgo_export.h"
 #include "rocksdb/status.h"
 #include "rocksdb/utilities/env_mirror.h"
 

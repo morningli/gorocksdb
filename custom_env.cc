@@ -5,10 +5,10 @@
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
 #include "custom_env.h"
+#include "_cgo_export.h"
 
 #include <sys/time.h>
 #include <time.h>
-
 #include <cstdlib>
 #include <mutex>
 #include <utility>
