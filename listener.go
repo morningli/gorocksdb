@@ -2,6 +2,7 @@ package gorocksdb
 
 // #include "rocksdb/c.h"
 // #include "gorocksdb.h"
+// #include <stdbool.h>
 import "C"
 
 type (
