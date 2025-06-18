@@ -115,7 +115,7 @@ static bool SaveError(char** errptr, const rocksdb::Status& s) {
   return true;
 }
 
-char* rocksdb_resume(rocksdb_t* db, char** errptr) {
+void rocksdb_resume(rocksdb_t* db, char** errptr) {
   rocksdb_t_tmp* _db = (rocksdb_t_tmp*)db;  
   SaveError(errptr, _db->rep->Resume());
 }
